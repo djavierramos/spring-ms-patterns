@@ -29,7 +29,7 @@ class CustomersServiceApplicationTests {
 	@SneakyThrows
 	void testGetCustomerById() {
 		mockMvc.perform(
-			MockMvcRequestBuilders.get("/customers/{customer-id}", "asdf")
+			MockMvcRequestBuilders.get("/{customer-id}", "asdf")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andDo(MockMvcResultHandlers.print())
 			.andExpect(MockMvcResultMatchers.status().isOk());		

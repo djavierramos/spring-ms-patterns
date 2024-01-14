@@ -1,0 +1,36 @@
+server: 
+  port: 8081
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: customers_route
+          uri: http://localhost:8082/api/customers
+          predicates: 
+          - Path=/customers/**
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: DEBUG
+      http:
+        server:
+          reactive: DEBUG
+      web:
+        reactive: DEBUG
+      boot:
+        autoconfigure:
+          web: DEBUG
+    reactor:
+      netty: DEBUG
+  
