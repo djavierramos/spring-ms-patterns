@@ -1,9 +1,6 @@
 server:
-  port: 8082
+  port: 8083
   contextPath: /api
-web:
-  cors: 
-    allowed-origins: "http://localhost:8081"  
 logging:
   level:
     root: INFO

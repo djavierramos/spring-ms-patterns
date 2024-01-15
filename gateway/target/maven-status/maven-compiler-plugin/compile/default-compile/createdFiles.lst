@@ -1,1 +1,2 @@
 com\breadhard\spring\patterns\apigateway\ApiGatewayApplication.class
+com\breadhard\spring\patterns\apigateway\infraestructure\configuration\CorsGlobalConfiguration.class

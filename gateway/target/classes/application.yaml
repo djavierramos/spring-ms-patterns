@@ -1,5 +1,8 @@
 server: 
   port: 8081
+web:
+  cors: 
+    allowed-origins: "*"    
 spring:
   cloud:
     gateway:
@@ -7,7 +10,42 @@ spring:
         - id: customers_route
           uri: http://localhost:8082/api/customers
           predicates: 
-          - Path=/customers/**
+          - Path=/api/customers/**
+        - id: customers_route
+          uri: http://localhost:8083/api/orders
+          predicates: 
+          - Path=/api/orders/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"          
+springdoc:
+  enable-native-support: true
+  api-docs:
+    groups:
+      enabled: true
+    enabled: true
+  group-configs:
+    - group: customers
+      paths-to-match:
+        - /customers/**
+      display-name: Customers Service
+    - group: orders
+      paths-to-match:
+        - /orders/**
+      display-name: Orders Service
+  swagger-ui:
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
+    urls:
+      - url: http://localhost:8082/v3/api-docs
+        name: Customers Service
+      - url: http://localhost:8083/v3/api-docs
+        name: Customers Service
 management:
   endpoint:
     gateway:
@@ -15,22 +53,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: gateway
+        include: "*"
 logging:
   level:
     root: INFO
     org:
       springframework:
-        cloud:
-          gateway: DEBUG
-      http:
-        server:
-          reactive: DEBUG
-      web:
-        reactive: DEBUG
-      boot:
-        autoconfigure:
-          web: DEBUG
-    reactor:
-      netty: DEBUG
-  
+        cloud.gateway: DEBUG
+        http.server.reactive: DEBUG
+        web.reactive: DEBUG
