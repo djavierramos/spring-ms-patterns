@@ -4,15 +4,17 @@ web:
   cors: 
     allowed-origins: "*"    
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       routes:
         - id: customers_route
-          uri: http://localhost:8082/api/customers
+          uri: lb://customers-service
           predicates: 
           - Path=/api/customers/**
-        - id: customers_route
-          uri: http://localhost:8083/api/orders
+        - id: orders_route
+          uri: lb://orders-service
           predicates: 
           - Path=/api/orders/**
       default-filters:
@@ -23,29 +25,6 @@ spring:
             allowedOrigins: "*"
             allowedHeaders: "*"
             allowedMethods: "*"          
-springdoc:
-  enable-native-support: true
-  api-docs:
-    groups:
-      enabled: true
-    enabled: true
-  group-configs:
-    - group: customers
-      paths-to-match:
-        - /customers/**
-      display-name: Customers Service
-    - group: orders
-      paths-to-match:
-        - /orders/**
-      display-name: Orders Service
-  swagger-ui:
-    config-url: /v3/api-docs/swagger-config
-    url: /v3/api-docs
-    urls:
-      - url: http://localhost:8082/v3/api-docs
-        name: Customers Service
-      - url: http://localhost:8083/v3/api-docs
-        name: Customers Service
 management:
   endpoint:
     gateway:
@@ -61,4 +40,10 @@ logging:
       springframework:
         cloud.gateway: DEBUG
         http.server.reactive: DEBUG
-        web.reactive: DEBUG
+        web.reactive: DEBUG    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true

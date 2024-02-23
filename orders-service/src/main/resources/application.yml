@@ -1,0 +1,19 @@
+server:
+  port: 8083
+  contextPath: /api
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        http.server.reactive: DEBUG
+        web.reactive: DEBUG
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+spring:
+  application:
+    name: orders-service
