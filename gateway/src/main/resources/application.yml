@@ -6,6 +6,10 @@ web:
 spring:
   application:
     name: api-gateway
+  boot:
+    admin:
+      client:
+        url: lb://CONFIG-SERVER
   cloud:
     gateway:
       routes:

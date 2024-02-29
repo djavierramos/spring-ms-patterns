@@ -1,6 +1,5 @@
 server:
   port: 8082
-  contextPath: /api
 web:
   cors: 
     allowed-origins: "http://localhost:8081"  
@@ -20,3 +19,34 @@ eureka:
 spring:
   application:
     name: customers-service
+  boot:
+    admin:
+      client:
+        url: lb://CONFIG-SERVER
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: true
+  h2:
+    console:
+      enabled: true
+flyway:
+  user: sa
+  password: password
+  schemas: APP
+  url: jdbc:h2:mem:testdb
+  locations: classpath:db/migrations
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+opentracing:
+  jaeger:
+    http-sender:
+      url: http://localhost:14268/api/traces
