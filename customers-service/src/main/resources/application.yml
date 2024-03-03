@@ -5,18 +5,21 @@ web:
     allowed-origins: "http://localhost:8081"  
 logging:
   level:
-    root: INFO
+    root: DEBUG
     org:
       springframework:
         http.server.reactive: DEBUG
         web.reactive: DEBUG
 eureka:
   client:
+    enabled: false
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
     preferIpAddress: true
 spring:
+  main:
+    web-application-type: reactive
   application:
     name: customers-service
   boot:
@@ -24,17 +27,23 @@ spring:
       client:
         url: lb://CONFIG-SERVER
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb:RUNSCRIPT FROM 'classpath:db/migrations/V1_0_0__initdb.sql'
     driverClassName: org.h2.Driver
     username: sa
     password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
   flyway:
     enabled: true
   h2:
     console:
       enabled: true
+hibernate:
+  show_sql: true
 flyway:
   user: sa
   password: password
